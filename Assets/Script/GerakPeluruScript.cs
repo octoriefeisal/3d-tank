@@ -13,29 +13,41 @@ public class GerakPeluruScript : MonoBehaviour {
 	private float _kecAwal;
 	private float _sudutMeriam;
 	private float _sudutTembak;
+	private float _gravitasi;
 	private Vector3 _posisiAwal;
 	private AudioSource audioSource;
 
 	public GameObject ledakan;
 	public AudioClip audioLedakan;
+
+	public GameManagerScript gameManager;
+	private bool isLanded = true;
+
 	// Use this for initialization
 	void Start () {
 		myTransform = transform;
 
 		tankBehavior = GameObject.FindObjectOfType<TankBehaviorScript>();
 		_kecAwal = tankBehavior.kecepatanAwalPeluru;
-		_sudutTembak = tankBehavior.nilaiRotasiY;
+		_sudutTembak = tankBehavior.sudutTembak;
 		_sudutMeriam = tankBehavior.sudutMeriam;
 
 		_posisiAwal = myTransform.position;
 
 
 		audioSource = GetComponent<AudioSource>();
+		_gravitasi = GameObject.FindObjectOfType<TankBehaviorScript>().gravity;
+
+		gameManager = GameObject.FindObjectOfType<GameManagerScript>();
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		waktuTerbangPeluru += Time.deltaTime;
+		if( isLanded)
+			waktuTerbangPeluru += Time.deltaTime;
+
+		gameManager._lamaWaktuTerbangPeluru = this.waktuTerbangPeluru;
 
 		myTransform.position = PosisiTerbangPeluru(myTransform.position, _kecAwal, waktuTerbangPeluru, _sudutTembak, _sudutMeriam);
 	}
@@ -62,7 +74,11 @@ public class GerakPeluruScript : MonoBehaviour {
 			Destroy(go, 3f);
 
 			audioSource.PlayOneShot(audioLedakan);
-        }
+
+			gameManager._jarakTembak = Vector3.Distance(_posisiAwal, myTransform.position);
+
+			isLanded = false;
+		}
     }
 
 	

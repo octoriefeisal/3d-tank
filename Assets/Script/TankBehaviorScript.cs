@@ -15,12 +15,12 @@ public class TankBehaviorScript : MonoBehaviour {
 
 	public float kecepatanRotasi = 20;
 	public float kecepatanAwalPeluru = 20;
-
+	public float gravity = 10;
 	[HideInInspector]
 	public float sudutMeriam;
 
 	[HideInInspector]
-	public float nilaiRotasiY;
+	public float sudutTembak;
 
 	public GameObject objekTembakan;
 	public GameObject objekLedakan;
@@ -58,23 +58,23 @@ public class TankBehaviorScript : MonoBehaviour {
 			myTransform.Rotate(Vector3.forward * kecepatanRotasi * Time.deltaTime, Space.Self);
 		}
 
-		sudutMeriam = myTransform.localEulerAngles.z;		
+		sudutMeriam = myTransform.localEulerAngles.z;
 		//region menentukan state
-		nilaiRotasiY= 360-selongsong.transform.localEulerAngles.x;
+		sudutTembak = 360-selongsong.transform.localEulerAngles.x;
 		
-		if (nilaiRotasiY ==0 ||nilaiRotasiY==360)
+		if (sudutTembak == 0 || sudutTembak == 360)
 		{
 			stateRotasiVertikal="aman";
 		}
-		else if (nilaiRotasiY > 0 && nilaiRotasiY<15)
+		else if (sudutTembak > 0 && sudutTembak < 15)
 		{
 			stateRotasiVertikal="aman";
 		}
-		else if (nilaiRotasiY > 15 && nilaiRotasiY <16)
+		else if (sudutTembak > 15 && sudutTembak < 16)
 		{
 			stateRotasiVertikal="atas";
 		}
-		else if (nilaiRotasiY > 350)
+		else if (sudutTembak > 350)
 		{
 			stateRotasiVertikal = "bawah";
 		}
